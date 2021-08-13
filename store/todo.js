@@ -1,22 +1,35 @@
+import firebase from "~/plugins/firebase"
+import { firestoreAction } from "vuexfire"
+
+const db = firebase.firestore()
+const todosRef = db.collection("todos")
+
 export const state = () => ({
-  message: 'hello world'
+  todos: []
 })
 
-export const mutations = {
-  changeMessage(state, e) {
-    state.message = e
-  },
-  add(state) {
-    state.message = ''
-  }
-
-}
-
 export const actions = {
-  changeMessage(context, e) {
-    context.commit('changeMessage', e)
-  },
-  add(context) {
-    context.commit('add')
-  }
+  init: firestoreAction(({ bindFirestoreRef }) => {
+    return bindFirestoreRef('todos',todosRef)
+  }),
+  add: firestoreAction((context, name) => {
+    if (name.trim()) {
+      // console.log(todosRef)
+      todosRef.add({
+        name: name,
+        done: false,
+        created: firebase.firestore.FieldValue.serverTimestamp()
+      })
+    }
+  }),
+  remove: firestoreAction((context, id) => {
+    todosRef.doc(id).delete()
+  }),
+  toggle: firestoreAction((context, todo) => {
+    console.log(todo)
+    todosRef.doc(todo.id).update({
+      done: !todo.done
+    })
+  })
+
 }
