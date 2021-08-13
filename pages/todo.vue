@@ -69,7 +69,7 @@ export default {
   },
   computed: {
     todos() {
-      return this.$store.state.todo.todos
+      return this.$store.getters['todo/orderdTodos']
     },
   },
   filters: {

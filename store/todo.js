@@ -1,5 +1,6 @@
 import firebase from "~/plugins/firebase"
 import { firestoreAction } from "vuexfire"
+import _ from 'lodash'
 
 const db = firebase.firestore()
 const todosRef = db.collection("todos")
@@ -10,7 +11,7 @@ export const state = () => ({
 
 export const actions = {
   init: firestoreAction(({ bindFirestoreRef }) => {
-    return bindFirestoreRef('todos',todosRef)
+    return bindFirestoreRef('todos', todosRef)
   }),
   add: firestoreAction((context, name) => {
     if (name.trim()) {
@@ -30,6 +31,12 @@ export const actions = {
     todosRef.doc(todo.id).update({
       done: !todo.done
     })
-  })
+  }),
 
+}
+
+export const getters = {
+  orderdTodos(state) {
+    return _.sortBy(state.todos, 'created')
+  }
 }
