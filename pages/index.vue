@@ -2,35 +2,34 @@
   <v-app>
     <div>
       <nuxt-link to="/todo">
-        ようこそ TODOアプリへ
+        ようこそ YOUR TODOアプリへ
       </nuxt-link>
     </div>
   </v-app>
 </template>
 
 <script>
-export default {
-
-}
+export default {}
 </script>
 
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital@1&display=swap');
-*{
+* {
   font-family: 'STIX Two Text', serif;
 }
 div {
   display: flex;
-  height: 700px;
+  height: 100%;
   justify-content: center;
   & a {
-    font-size: 20px;
-    
+    display: block;
+    width: 600px;
+    font-size: 40px;
     color: white;
     height: 70px;
-    align-self: center;
     text-decoration: none;
-    &:hover{
+    align-self: center;
+    &:hover {
       color: rgb(202, 118, 202);
     }
   }
