@@ -19,7 +19,6 @@ export const actions = {
     if (addItem.todo) {
       todosRef.add({
         todo: addItem.todo,
-        dedline: '',
         done: false,
         created: firebase.firestore.FieldValue.serverTimestamp()
       })
@@ -32,7 +31,7 @@ export const actions = {
 
     todosRef.doc(edit.editedId).update({
       todo:edit.editedItem.todo,
-      dedline:edit.editedItem.dedline
+      // dedline:edit.editedItem.dedline
     })
   }),
 

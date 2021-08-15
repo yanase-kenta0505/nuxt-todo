@@ -42,12 +42,12 @@
       <v-data-table
         :headers="headers"
         :items="$store.getters['todo/orderdTodos']"
-        sort-by="dedline "
+        sort-by="dedline"
         class="elevation-1"
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>YOUR TODO</v-toolbar-title>
+            <v-toolbar-title>YOUR TODO LIST</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="500px">
@@ -175,7 +175,6 @@ export default {
     editedIndex: -1,
     editedItem: {
       todo: '',
-      dedline: '',
     },
     defaultItem: {
       todo: '',
@@ -222,6 +221,7 @@ export default {
       // })
       this.editedIndex = this.$store.state.todo.todos.indexOf(item)
       this.dialog = true
+      console.log(this.editedIndex)
     },
 
     deleteItem(item) {
@@ -262,7 +262,6 @@ export default {
         console.log(editedItem)
         // console.log(this.editedIndex)
         // console.log(this.$store.state.todo.todos[this.editedIndex].id)
-
         this.$store.dispatch('todo/editItem', {
           editedItem: editedItem,
           editedIndex: this.editedIndex,
