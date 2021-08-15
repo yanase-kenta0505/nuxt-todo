@@ -6,30 +6,44 @@ const db = firebase.firestore()
 const todosRef = db.collection("todos")
 
 export const state = () => ({
-  todos: []
+  todos: [],
 })
 
 export const actions = {
   init: firestoreAction(({ bindFirestoreRef }) => {
     return bindFirestoreRef('todos', todosRef)
   }),
-  add: firestoreAction((context, name) => {
-    if (name.trim()) {
-      // console.log(todosRef)
+
+  add: firestoreAction((context, addItem) => {
+    console.log(addItem)
+    if (addItem.todo) {
       todosRef.add({
-        name: name,
+        todo: addItem.todo,
+        dedline: '',
         done: false,
         created: firebase.firestore.FieldValue.serverTimestamp()
       })
     }
   }),
-  remove: firestoreAction((context, id) => {
-    todosRef.doc(id).delete()
+
+  editItem: firestoreAction((context,edit) => {
+    // console.log(edit.editedId)
+    console.log(edit.editedItem.todo)
+
+    todosRef.doc(edit.editedId).update({
+      todo:edit.editedItem.todo,
+      dedline:edit.editedItem.dedline
+    })
   }),
-  toggle: firestoreAction((context, todo) => {
-    console.log(todo)
-    todosRef.doc(todo.id).update({
-      done: !todo.done
+
+  delete: firestoreAction((context, deleteId) => {
+    // console.log(deleteId)
+    todosRef.doc(deleteId).delete()
+  }),
+  done: firestoreAction((context, item) => {
+    console.log(item.done)
+    todosRef.doc(item.id).update({
+      done: !item.done
     })
   }),
 

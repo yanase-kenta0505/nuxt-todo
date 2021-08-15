@@ -25,7 +25,6 @@ div {
     display: block;
     width: 600px;
     font-size: 40px;
-    color: white;
     height: 70px;
     text-decoration: none;
     align-self: center;
