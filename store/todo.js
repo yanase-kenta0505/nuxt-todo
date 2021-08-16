@@ -14,11 +14,13 @@ export const actions = {
     return bindFirestoreRef('todos', todosRef)
   }),
 
-  add: firestoreAction((context, addItem) => {
-    console.log(addItem)
-    if (addItem.todo) {
+  add: firestoreAction((context, add) => {
+    console.log(add.editedItem.todo)
+    console.log(add.date)
+    if (add.editedItem.todo) {
       todosRef.add({
-        todo: addItem.todo,
+        todo: add.editedItem.todo,
+        dedline:add.date,
         done: false,
         created: firebase.firestore.FieldValue.serverTimestamp()
       })
@@ -31,7 +33,7 @@ export const actions = {
 
     todosRef.doc(edit.editedId).update({
       todo:edit.editedItem.todo,
-      // dedline:edit.editedItem.dedline
+      dedline:edit.editedDate
     })
   }),
 

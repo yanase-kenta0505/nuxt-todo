@@ -77,10 +77,29 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="editedItem.dedline"
-                          label="Dedline"
-                        ></v-text-field>
+                        <v-menu
+                          v-model="menu2"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="auto"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="date"
+                              label="Picker without buttons"
+                              prepend-icon="mdi-calendar"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker
+                            v-model="date"
+                            @input="menu2 = false"
+                          ></v-date-picker>
+                        </v-menu>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -117,6 +136,8 @@
           </v-toolbar>
         </template>
 
+        <!-- この「v-slot:[`item.done`]="{ item }"」は意味的には
+       headerの「done」の列に＜template＞以下の要素を入れていくようなイメージ -->
         <template v-slot:[`item.done`]="{ item }">
           <v-simple-checkbox
             v-model="item.done"
@@ -124,6 +145,8 @@
             @click="done(item)"
           ></v-simple-checkbox>
         </template>
+
+        <!-- <template v-slot:[`item.dedline`]="{ item }"></template> -->
 
         <template v-slot:[`item.status`]="{ item }">
           <v-btn color="primary" depressed elevation="5" v-show="item.done">
@@ -158,7 +181,7 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
-    deleteId:null,
+    deleteId: null,
     headers: [
       {
         text: 'TODO',
@@ -179,6 +202,13 @@ export default {
     defaultItem: {
       todo: '',
     },
+
+    date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+      .toISOString()
+      .substr(0, 10),
+    menu: false,
+    modal: false,
+    menu2: false,
   }),
 
   computed: {
@@ -198,12 +228,13 @@ export default {
 
   created() {
     this.$store.dispatch('todo/init')
+    // console.log(this.date)
   },
 
   methods: {
     done(item) {
       console.log(item)
-      this.$store.dispatch('todo/done',item)
+      this.$store.dispatch('todo/done', item)
     },
 
     editItem(item) {
@@ -219,9 +250,12 @@ export default {
       //   changeTodo:changeTodo
 
       // })
+      console.log(item)
+      this.date = item.dedline
+      this.editedItem.todo = item.todo
       this.editedIndex = this.$store.state.todo.todos.indexOf(item)
-      this.dialog = true
       console.log(this.editedIndex)
+      this.dialog = true
     },
 
     deleteItem(item) {
@@ -236,7 +270,7 @@ export default {
 
     deleteItemConfirm() {
       // console.log(this.deleteId)
-      this.$store.dispatch('todo/delete',this.deleteId)
+      this.$store.dispatch('todo/delete', this.deleteId)
       this.closeDelete()
     },
 
@@ -263,12 +297,18 @@ export default {
         // console.log(this.editedIndex)
         // console.log(this.$store.state.todo.todos[this.editedIndex].id)
         this.$store.dispatch('todo/editItem', {
+          editedDate:this.date,
           editedItem: editedItem,
           editedIndex: this.editedIndex,
-          editedId:this.$store.state.todo.todos[this.editedIndex].id
+          editedId: this.$store.state.todo.todos[this.editedIndex].id,
         })
       } else {
-        this.$store.dispatch('todo/add', editedItem)
+        console.log(this.date)
+        // this.$store.dispatch('todo/add', editedItem)
+        this.$store.dispatch('todo/add',{
+          editedItem:editedItem,
+          date:this.date
+        })
       }
       this.close()
     },
