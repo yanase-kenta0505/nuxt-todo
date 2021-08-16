@@ -6,7 +6,12 @@
       </v-card-title>
       <v-card-text>
         <v-form>
-          <v-text-field prepend-icon="mdi-account-circle" label="ユーザ名" v-model="name"/>
+          <v-text-field
+            prepend-icon="mdi-account-circle"
+            label="email"
+            :rules="[rules.email]"
+            v-model="email"
+          />
           <v-text-field
             prepend-icon="mdi-lock"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -16,7 +21,7 @@
             v-model="password"
           />
           <v-card-actions>
-            <v-btn class="info" @click="submit">ログイン</v-btn>
+            <v-btn class="info">ログイン</v-btn>
           </v-card-actions>
         </v-form>
       </v-card-text>
@@ -29,13 +34,14 @@ export default {
   data() {
     return {
       showPassword: false,
-      name:'',
-      password:''
-    }
-  },
-  methods: {
-    submit(){
-      console.log(`${this.name}:${this.password}`)
+      email: '',
+      password: '',
+      rules: {
+        email: (value) => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Invalid e-mail.'
+        },
+      },
     }
   },
 }
