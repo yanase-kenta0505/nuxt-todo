@@ -42,6 +42,7 @@
       <v-data-table
         :headers="headers"
         :items="$store.getters['todo/orderdTodos']"
+        :search="search"
         sort-by="dedline"
         class="elevation-1"
       >
@@ -50,10 +51,18 @@
             <v-toolbar-title>YOUR TODO LIST</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+              class="mr-10"
+            ></v-text-field>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  color="primary"
+                  color="teal accent-3"
                   dark
                   class="mb-2"
                   v-bind="attrs"
@@ -149,10 +158,10 @@
         <!-- <template v-slot:[`item.dedline`]="{ item }"></template> -->
 
         <template v-slot:[`item.status`]="{ item }">
-          <v-btn color="primary" depressed elevation="5" v-show="item.done">
+          <v-btn color="primary" depressed elevation="1" v-show="item.done">
             Complete
           </v-btn>
-          <v-btn color="error" depressed elevation="5" v-show="!item.done">
+          <v-btn color="error" depressed elevation="1" v-show="!item.done">
             Incomplete
           </v-btn>
         </template>
@@ -179,6 +188,7 @@
 <script>
 export default {
   data: () => ({
+    search: '',
     dialog: false,
     dialogDelete: false,
     deleteId: null,
@@ -231,6 +241,8 @@ export default {
     // console.log(this.date)
   },
 
+
+
   methods: {
     done(item) {
       console.log(item)
@@ -250,6 +262,7 @@ export default {
       //   changeTodo:changeTodo
 
       // })
+
       console.log(item)
       this.date = item.dedline
       this.editedItem.todo = item.todo
@@ -297,7 +310,7 @@ export default {
         // console.log(this.editedIndex)
         // console.log(this.$store.state.todo.todos[this.editedIndex].id)
         this.$store.dispatch('todo/editItem', {
-          editedDate:this.date,
+          editedDate: this.date,
           editedItem: editedItem,
           editedIndex: this.editedIndex,
           editedId: this.$store.state.todo.todos[this.editedIndex].id,
@@ -305,9 +318,9 @@ export default {
       } else {
         console.log(this.date)
         // this.$store.dispatch('todo/add', editedItem)
-        this.$store.dispatch('todo/add',{
-          editedItem:editedItem,
-          date:this.date
+        this.$store.dispatch('todo/add', {
+          editedItem: editedItem,
+          date: this.date,
         })
       }
       this.close()
