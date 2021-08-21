@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <div>
-      <nuxt-link to="/todo">
-        ようこそ YOUR TODOアプリへ
+      <nuxt-link to="/signup">
+        WELCOME TODO LIST
       </nuxt-link>
     </div>
   </v-app>
@@ -21,6 +21,7 @@ div {
   display: flex;
   height: 100%;
   justify-content: center;
+  
   & a {
     display: block;
     width: 600px;
@@ -28,6 +29,8 @@ div {
     height: 70px;
     text-decoration: none;
     align-self: center;
+    text-align: center;
+    
     &:hover {
       color: rgb(202, 118, 202);
     }

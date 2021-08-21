@@ -1,5 +1,6 @@
 import firebase from "~/plugins/firebase"
 import { firestoreAction } from "vuexfire"
+
 import _ from 'lodash'
 
 const db = firebase.firestore()
